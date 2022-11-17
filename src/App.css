@@ -19,7 +19,7 @@
   --gray: #c4c4c4;
   --white: #ffffff;
   --textcolor: #e0e0e0;
-  --eventyrgreen: #17cf2c;
+  --eventyrgreen: #15b428;
 }
 
 ::selection {
@@ -63,6 +63,12 @@ nav {
   transition: all 0.2s;
 }
 
+.add-button:hover {
+  background-color: var(--eventyrgreen);
+  color: var(--white);
+  transition: all 0.2s;
+}
+
 /* input popup */
 .new-write-popup {
   position: fixed;
@@ -73,7 +79,7 @@ nav {
 
   background-color: var(--black);
   width: 80%;
-  height: 65%;
+  height: 600px;
 
   border-radius: 5px;
   border: 2px solid var(--border);
@@ -95,6 +101,10 @@ nav {
   color: var(--textcolor);
 }
 
+.new-write-popup .card-edit-p {
+  font-size: 24px;
+}
+
 .new-close-btn {
   margin-left: auto;
   padding: 5px;
@@ -104,20 +114,27 @@ nav {
   cursor: pointer;
 }
 
-.add-button:hover {
+.new-submit-btn {
+  margin-top: 3.5rem;
+  padding: 10px;
+  font-weight: 500;
+  font-size: 14px;
   background-color: var(--eventyrgreen);
   color: var(--white);
-  transition: all 0.2s;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
 }
 
-.new-submit-btn {
-  margin-top: 10rem;
-  padding: 5px;
+.delete-btn {
+  margin-top: 0.5rem;
+  padding: 10px;
   font-weight: 500;
   font-size: 14px;
   background-color: var(--white);
   color: var(--black);
   border-radius: 5px;
+  border: none;
   cursor: pointer;
 }
 
@@ -177,6 +194,10 @@ nav {
   cursor: pointer;
 }
 
+.select-wrapper {
+  max-height: 100px;
+}
+
 .reason-container textarea {
   display: block;
   background-color: var(--border);
@@ -202,26 +223,87 @@ nav {
 }
 
 .card {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
+  display: flex;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  align-items: left;
+  flex-direction: column;
   background-color: var(--black);
   border-radius: 5px;
   border: 2px solid var(--border);
-
-  box-sizing: border-box;
   color: var(--textcolor);
   font-size: 14px;
-  height: auto;
+  height: 200px;
   outline: 0;
   width: 280px;
-  padding: 25px;
+  padding: 20px;
   margin: 8px;
+
+  display: flex;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  align-items: left;
+  flex-direction: column;
+  margin-top: 2rem;
 }
 
+.card-top-container {
+  display: flex;
+  align-items: center;
+}
 .card h1 {
-  /* white-space: nowrap; */
+  display: inline-block;
+  margin-right: auto;
+  font-size: 20px;
   overflow: hidden;
+}
+
+.card-update-btn {
+  display: inline-block;
+  margin-left: auto;
+  padding: 5px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+}
+
+.card-sanction {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.card-reason {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.spacer-line {
+  margin-top: 1rem;
+  width: 100%;
+  height: 1px;
+  background-color: var(--border);
+}
+
+.card-bottom-container {
+  display: flex;
+  margin-top: auto;
+}
+
+.card-bottom-container .card-date {
+  display: inline-block;
+  margin-right: auto;
+  font-weight: 600;
+}
+
+.card-bottom-container .card-staff {
+  display: inline-block;
+  margin-left: auto;
+  font-weight: 600;
 }
 
 .cards-wrapper {
