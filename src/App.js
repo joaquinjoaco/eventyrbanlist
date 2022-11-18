@@ -55,6 +55,7 @@ function App() {
       });
 
       setIsHidden(true);
+      document.getElementById("cardsWrapper").classList.remove("blur");
       setNickname("");
       setSanction("Aviso");
       setReason("");
@@ -69,6 +70,7 @@ function App() {
   // update
   const handleUpdate = (todo) => {
     setIsEdit(true);
+    document.getElementById("cardsWrapper").classList.add("blur");
     setTempUuid(todo.uuid);
     setNickname(todo.nickname);
     setSanction(todo.sanction);
@@ -88,6 +90,7 @@ function App() {
       });
 
       setIsEdit(false);
+      document.getElementById("cardsWrapper").classList.remove("blur");
       setNickname("");
       setSanction("Aviso");
       setReason("");
@@ -102,6 +105,7 @@ function App() {
   const handleDelete = () => {
     remove(ref(db, `/${tempUuid}`));
     setIsEdit(false);
+    document.getElementById("cardsWrapper").classList.remove("blur");
     setNickname("");
     setSanction("Aviso");
     setReason("");
@@ -118,6 +122,7 @@ function App() {
         <button className="add-button" onClick={
           () => {
             setIsHidden(false);
+            document.getElementById("cardsWrapper").classList.add("blur");
           }
         }>
           Nuevo
@@ -132,6 +137,7 @@ function App() {
             <p className="new-write-p">Nuevo registro</p>
             <button className="new-close-btn" onClick={() => {
               setIsHidden(true);
+              document.getElementById("cardsWrapper").classList.remove("blur");
               setNickname("");
               setSanction("Aviso");
               setReason("");
@@ -196,7 +202,7 @@ function App() {
 
 
 
-      <div className="cards-wrapper">
+      <div id="cardsWrapper" className="cards-wrapper">
         {todos.map((todo) => (
 
 
@@ -204,6 +210,7 @@ function App() {
           <div className="card" key={todo.uuid}>
             <div className="card-top-container">
               <h1>{todo.nickname}</h1>
+
               <button className="card-update-btn" onClick={() => handleUpdate(todo)}><box-icon type='solid' name='pencil' color="white"></box-icon></button>
 
             </div>
@@ -237,7 +244,8 @@ function App() {
                 setSanction("Aviso");
                 setReason("");
                 setStaff("Console");
-                setError("")
+                setError("");
+                document.getElementById("cardsWrapper").classList.remove("blur");
               }}
               >
                 <box-icon className="pelao" size="md" name="x" color="white"></box-icon>

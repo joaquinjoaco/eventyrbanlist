@@ -34,6 +34,7 @@ body {
 /* nav */
 nav {
   position: fixed;
+  z-index: 998;
   display: flex;
   align-items: center;
   background-color: var(--black);
@@ -73,7 +74,7 @@ nav {
 /* input popup */
 .new-write-popup {
   position: fixed;
-
+  z-index: 999;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -86,6 +87,24 @@ nav {
   border: 2px solid var(--border);
 }
 
+@media screen and (min-width: 900px) {
+  .new-write-popup {
+    width: 65%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .new-write-popup {
+    width: 30%;
+  }
+}
+
+@media screen and (min-width: 2500px) {
+  .cards-wrapper {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 .top-container {
   display: flex;
   align-items: center;
@@ -95,7 +114,8 @@ nav {
   padding-inline-end: 2rem;
 }
 
-.new-write-popup .new-write-p {
+.new-write-popup .new-write-p,
+.new-write-popup .card-edit-p {
   margin-right: auto;
   font-size: 26px;
   font-weight: 800;
@@ -107,7 +127,6 @@ nav {
 }
 
 .new-close-btn {
-  margin-left: auto;
   padding: 5px;
   font-weight: 500;
   background-color: transparent;
@@ -230,6 +249,12 @@ nav {
   padding: 8rem;
   margin: 0 auto;
   align-items: center;
+  transition: 0.5s all;
+}
+
+.cards-wrapper.blur {
+  filter: blur(2px);
+  transition: 0.5s all;
 }
 
 .card {
