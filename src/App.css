@@ -216,7 +216,7 @@ nav {
 
 .cards-wrapper {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   padding: 8rem;
   margin: 0 auto;
   align-items: center;
@@ -304,14 +304,6 @@ nav {
   display: inline-block;
   margin-left: auto;
   font-weight: 600;
-}
-
-.cards-wrapper {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  padding: 8rem;
-  margin: 0 auto;
-  align-items: center;
 }
 
 @media only screen and (max-width: 1700px) {

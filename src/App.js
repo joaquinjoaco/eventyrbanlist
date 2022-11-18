@@ -7,18 +7,26 @@ import "boxicons";
 
 function App() {
 
-  const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
+  const [nickname, setNickname] = useState("");
+  const [sanction, setSanction] = useState("Aviso");
+  const [reason, setReason] = useState("");
+  const [staff, setStaff] = useState("Console");
 
   const [isEdit, setIsEdit] = useState(false);
   const [isHidden, setIsHidden] = useState(true);
   const [tempUuid, setTempUuid] = useState("");
 
-  const handleTodoChange = (e) => {
-    setTodo(e.target.value);
-  }
+  // const handleTodoChange = (e) => {
+  //   setNickname(e.target.value);
+  // }
 
-  // read
+  // const handleSanctionChange = (e) => {
+  //   setSanction(e.target.value);
+  // }
+
+
+  // read the database and set the "todo" objects in the "todos" Array
   useEffect(() => {
     onValue(ref(db), snapshot => {
       setTodos([]);
@@ -32,42 +40,68 @@ function App() {
   }, []);
 
 
-  // write
+  // write to the database
   const writeToDatabase = () => {
+
+    let newDate = new Date()
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+    const fullDate = `${date}/${month < 10 ? `0${month}` : `${month}`}/${year}`;
+    console.log({ fullDate });
+
     const uuid = uid();
-    if (todo !== '') {
+
+    if (nickname !== '') {
       set(ref(db, `/${uuid}`), {
-        todo,
+        nickname,
+        sanction,
+        reason,
+        staff,
+        fullDate,
         uuid,
       });
     }
-    setTodo("");
+    setNickname("");
+    setSanction("Aviso");
+    setReason("");
+    setStaff("Console");
   }
 
   // update
   const handleUpdate = (todo) => {
     setIsEdit(true);
     setTempUuid(todo.uuid);
-    setTodo(todo.todo);
+    setNickname(todo.nickname);
+    setSanction(todo.sanction);
+    setReason(todo.reason);
+
   }
 
   // update part 2
   const handleSubmitChange = () => {
-    if (todo !== '') {
+    if (nickname !== '') {
       update(ref(db, `/${tempUuid}`), {
-        todo,
+        nickname,
+        sanction,
+        reason,
+        staff,
         uuid: tempUuid,
       });
-      setIsEdit(false);
 
-      setTodo("");
+      setIsEdit(false);
+      // state?
     }
   }
 
   // delete
-  const handleDelete = (todo) => {
+  const handleDelete = () => {
     remove(ref(db, `/${tempUuid}`));
     setIsEdit(false);
+    setNickname("");
+    setSanction("Aviso");
+    setReason("");
+    setStaff("Console");
   };
 
 
@@ -94,7 +128,10 @@ function App() {
             <p>Nuevo registro</p>
             <button className="new-close-btn" onClick={() => {
               setIsHidden(true);
-              setTodo("");
+              setNickname("");
+              setSanction("Aviso");
+              setReason("");
+              setStaff("Console");
             }}
             >
               <box-icon className="pelao" size="md" name="x" color="white"></box-icon>
@@ -103,13 +140,13 @@ function App() {
           <div className="inputs-container">
             <div className="nickname-container">
               <label>Nickname</label>
-              <input type="text" value={todo} onChange={handleTodoChange} />
+              <input type="text" value={nickname} onChange={(e) => { setNickname(e.target.value) }} />
             </div>
             <div className="sanction-container">
               <label>Sanción</label>
               <select
-              // value={ }
-              // onChange={(e) => setAuthor(e.target.value)}
+                value={sanction}
+                onChange={(e) => { setSanction(e.target.value) }}
               >
                 <option value="Aviso">Aviso</option>
                 <option value="Temp ban">Temp ban</option>
@@ -121,25 +158,25 @@ function App() {
             </div>
             <div className="reason-container">
               <label>Razón</label>
-              <textarea></textarea>
+              <textarea value={reason} onChange={(e) => { setReason(e.target.value) }}></textarea>
             </div>
             <div className="staff-container">
               <label>Staff</label>
               <div className="select-wrapper">
                 <select
-                // value={ }
-                // onChange={(e) => setAuthor(e.target.value)}
+                  value={staff}
+                  onChange={(e) => { setStaff(e.target.value) }}
                 >
                   <option value="Console">Console</option>
-                  <option value="Temp ban">Ryon</option>
-                  <option value="Ban IP">Fanatio</option>
-                  <option value="Permanente">Dilong</option>
-                  <option value="Mute">Kisin</option>
-                  <option value="Temp mute">Sathiel</option>
-                  <option value="Temp mute">Skaddi</option>
-                  <option value="Temp mute">Lacerannte</option>
-                  <option value="Temp mute">Ocaoj</option>
-                  <option value="Temp mute">Huumbug</option>
+                  <option value="Ryon">Ryon</option>
+                  <option value="Fanatio">Fanatio</option>
+                  <option value="Dilong">Dilong</option>
+                  <option value="Kisin">Kisin</option>
+                  <option value="Sathiel">Sathiel</option>
+                  <option value="Skaddi">Skaddi</option>
+                  <option value="Lacerannte">Lacerannte</option>
+                  <option value="Huumbug">Huumbug</option>
+                  <option value="Ocaoj">Ocaoj</option>
                 </select>
               </div>
             </div>
@@ -148,41 +185,49 @@ function App() {
         </div>
       )}
 
-      <div className="cards-wrapper">
 
+
+
+      <div className="cards-wrapper">
         {todos.map((todo) => (
 
 
 
           <div className="card" key={todo.uuid}>
             <div className="card-top-container">
-              <h1>{todo.todo}</h1>
+              <h1>{todo.nickname}</h1>
               <button className="card-update-btn" onClick={() => handleUpdate(todo)}><box-icon type='solid' name='pencil' color="white"></box-icon></button>
 
             </div>
-            <h2 className="card-sanction">%sanction%</h2>
-            <p className="card-reason">%reason%</p>
+            <h2 className="card-sanction">{todo.sanction}</h2>
+            <p className="card-reason">{todo.reason}</p>
             <div className="card-bottom-container">
-              <p className="card-date">%date%</p>
-              <p className="card-staff">%staff%</p>
+              <p className="card-date">{todo.fullDate}</p>
+              <p className="card-staff">{todo.staff}</p>
             </div>
 
           </div>
 
         ))}
       </div>
-      {/* edit */}
 
+
+
+
+      {/* edit */}
       {isEdit ? (
         <div className="new-write-popup">
           <div className="top-container">
             <p className="card-edit-p">Editar registro</p>
-            <button className="new-close-btn" onClick={() => handleDelete(todo)}>
+            <button className="new-close-btn" onClick={() => handleDelete()}>
               <box-icon name='trash-alt' type='solid' color="white" ></box-icon>
             </button>
             <button className="new-close-btn" onClick={() => {
               setIsEdit(false);
-              setTodo("");
+              setNickname("");
+              setSanction("Aviso");
+              setReason("");
+              setStaff("Console");
             }}
             >
               <box-icon className="pelao" size="md" name="x" color="white"></box-icon>
@@ -191,13 +236,13 @@ function App() {
           <div className="inputs-container">
             <div className="nickname-container">
               <label>Nickname</label>
-              <input type="text" value={todo} onChange={handleTodoChange} />
+              <input type="text" value={nickname} onChange={(e) => { setNickname(e.target.value) }} />
             </div>
             <div className="sanction-container">
               <label>Sanción</label>
               <select
-              // value={ }
-              // onChange={(e) => setAuthor(e.target.value)}
+                value={sanction}
+                onChange={(e) => { setSanction(e.target.value) }}
               >
                 <option value="Aviso">Aviso</option>
                 <option value="Temp ban">Temp ban</option>
@@ -209,25 +254,25 @@ function App() {
             </div>
             <div className="reason-container">
               <label>Razón</label>
-              <textarea></textarea>
+              <textarea value={reason} onChange={(e) => { setReason(e.target.value) }}></textarea>
             </div>
             <div className="staff-container">
               <label>Staff</label>
               <div className="select-wrapper">
                 <select
-                // value={ }
-                // onChange={(e) => setAuthor(e.target.value)}
+                  value={staff}
+                  onChange={(e) => { setStaff(e.target.value) }}
                 >
                   <option value="Console">Console</option>
-                  <option value="Temp ban">Ryon</option>
-                  <option value="Ban IP">Fanatio</option>
-                  <option value="Permanente">Dilong</option>
-                  <option value="Mute">Kisin</option>
-                  <option value="Temp mute">Sathiel</option>
-                  <option value="Temp mute">Skaddi</option>
-                  <option value="Temp mute">Lacerannte</option>
-                  <option value="Temp mute">Ocaoj</option>
-                  <option value="Temp mute">Huumbug</option>
+                  <option value="Ryon">Ryon</option>
+                  <option value="Fanatio">Fanatio</option>
+                  <option value="Dilong">Dilong</option>
+                  <option value="Kisin">Kisin</option>
+                  <option value="Sathiel">Sathiel</option>
+                  <option value="Skaddi">Skaddi</option>
+                  <option value="Lacerannte">Lacerannte</option>
+                  <option value="Huumbug">Huumbug</option>
+                  <option value="Ocaoj">Ocaoj</option>
                 </select>
               </div>
             </div>
