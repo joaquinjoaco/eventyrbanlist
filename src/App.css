@@ -20,6 +20,7 @@
   --white: #ffffff;
   --textcolor: #e0e0e0;
   --eventyrgreen: #15b428;
+  --error: #e7195a;
 }
 
 ::selection {
@@ -94,7 +95,7 @@ nav {
   padding-inline-end: 2rem;
 }
 
-.new-write-popup p {
+.new-write-popup .new-write-p {
   margin-right: auto;
   font-size: 26px;
   font-weight: 800;
@@ -142,9 +143,18 @@ nav {
   display: flex;
   margin-left: 2rem;
   margin-right: 2rem;
-  align-items: left;
+  align-items: right;
   flex-direction: column;
   margin-top: 2rem;
+  /* text-align: center; */
+}
+
+.inputs-container .error-p {
+  margin: 0 auto;
+  margin-top: 0.4rem;
+  color: var(--error);
+  font-size: 14px;
+  font-weight: 300;
 }
 
 .nickname-container label,

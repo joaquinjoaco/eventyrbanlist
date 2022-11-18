@@ -15,15 +15,8 @@ function App() {
 
   const [isEdit, setIsEdit] = useState(false);
   const [isHidden, setIsHidden] = useState(true);
+  const [error, setError] = useState("");
   const [tempUuid, setTempUuid] = useState("");
-
-  // const handleTodoChange = (e) => {
-  //   setNickname(e.target.value);
-  // }
-
-  // const handleSanctionChange = (e) => {
-  //   setSanction(e.target.value);
-  // }
 
 
   // read the database and set the "todo" objects in the "todos" Array
@@ -48,11 +41,10 @@ function App() {
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
     const fullDate = `${date}/${month < 10 ? `0${month}` : `${month}`}/${year}`;
-    console.log({ fullDate });
 
     const uuid = uid();
 
-    if (nickname !== '') {
+    if (nickname !== '' & reason !== '') {
       set(ref(db, `/${uuid}`), {
         nickname,
         sanction,
@@ -61,11 +53,17 @@ function App() {
         fullDate,
         uuid,
       });
+
+      setIsHidden(true);
+      setNickname("");
+      setSanction("Aviso");
+      setReason("");
+      setStaff("Console");
+      setError("")
+    } else {
+      setError("Hay campos vacíos.")
     }
-    setNickname("");
-    setSanction("Aviso");
-    setReason("");
-    setStaff("Console");
+
   }
 
   // update
@@ -80,7 +78,7 @@ function App() {
 
   // update part 2
   const handleSubmitChange = () => {
-    if (nickname !== '') {
+    if (nickname !== '' & reason !== '') {
       update(ref(db, `/${tempUuid}`), {
         nickname,
         sanction,
@@ -90,7 +88,13 @@ function App() {
       });
 
       setIsEdit(false);
-      // state?
+      setNickname("");
+      setSanction("Aviso");
+      setReason("");
+      setStaff("Console");
+      setError("")
+    } else {
+      setError("Hay campos vacíos.")
     }
   }
 
@@ -125,13 +129,15 @@ function App() {
       ) : (
         <div className="new-write-popup">
           <div className="top-container">
-            <p>Nuevo registro</p>
+            <p className="new-write-p">Nuevo registro</p>
             <button className="new-close-btn" onClick={() => {
               setIsHidden(true);
               setNickname("");
               setSanction("Aviso");
               setReason("");
               setStaff("Console");
+              setError("")
+
             }}
             >
               <box-icon className="pelao" size="md" name="x" color="white"></box-icon>
@@ -180,10 +186,12 @@ function App() {
                 </select>
               </div>
             </div>
-            <button className="new-submit-btn" onClick={() => { writeToDatabase(); setIsHidden(true); }}>Añadir</button>
+            {error ? (<p className="error-p">{error}</p>) : (<></>)}
+            <button className="new-submit-btn" onClick={() => { writeToDatabase(); }}>Añadir</button>
           </div>
         </div>
-      )}
+      )
+      }
 
 
 
@@ -215,75 +223,79 @@ function App() {
 
 
       {/* edit */}
-      {isEdit ? (
-        <div className="new-write-popup">
-          <div className="top-container">
-            <p className="card-edit-p">Editar registro</p>
-            <button className="new-close-btn" onClick={() => handleDelete()}>
-              <box-icon name='trash-alt' type='solid' color="white" ></box-icon>
-            </button>
-            <button className="new-close-btn" onClick={() => {
-              setIsEdit(false);
-              setNickname("");
-              setSanction("Aviso");
-              setReason("");
-              setStaff("Console");
-            }}
-            >
-              <box-icon className="pelao" size="md" name="x" color="white"></box-icon>
-            </button>
-          </div>
-          <div className="inputs-container">
-            <div className="nickname-container">
-              <label>Nickname</label>
-              <input type="text" value={nickname} onChange={(e) => { setNickname(e.target.value) }} />
-            </div>
-            <div className="sanction-container">
-              <label>Sanción</label>
-              <select
-                value={sanction}
-                onChange={(e) => { setSanction(e.target.value) }}
+      {
+        isEdit ? (
+          <div className="new-write-popup">
+            <div className="top-container">
+              <p className="card-edit-p">Editar registro</p>
+              <button className="new-close-btn" onClick={() => handleDelete()}>
+                <box-icon name='trash-alt' type='solid' color="white" ></box-icon>
+              </button>
+              <button className="new-close-btn" onClick={() => {
+                setIsEdit(false);
+                setNickname("");
+                setSanction("Aviso");
+                setReason("");
+                setStaff("Console");
+                setError("")
+              }}
               >
-                <option value="Aviso">Aviso</option>
-                <option value="Temp ban">Temp ban</option>
-                <option value="Ban IP">Ban IP</option>
-                <option value="Permanente">Permanente</option>
-                <option value="Mute">Mute</option>
-                <option value="Temp mute">Temp mute</option>
-              </select>
+                <box-icon className="pelao" size="md" name="x" color="white"></box-icon>
+              </button>
             </div>
-            <div className="reason-container">
-              <label>Razón</label>
-              <textarea value={reason} onChange={(e) => { setReason(e.target.value) }}></textarea>
-            </div>
-            <div className="staff-container">
-              <label>Staff</label>
-              <div className="select-wrapper">
+            <div className="inputs-container">
+              <div className="nickname-container">
+                <label>Nickname</label>
+                <input type="text" value={nickname} onChange={(e) => { setNickname(e.target.value) }} />
+              </div>
+              <div className="sanction-container">
+                <label>Sanción</label>
                 <select
-                  value={staff}
-                  onChange={(e) => { setStaff(e.target.value) }}
+                  value={sanction}
+                  onChange={(e) => { setSanction(e.target.value) }}
                 >
-                  <option value="Console">Console</option>
-                  <option value="Ryon">Ryon</option>
-                  <option value="Fanatio">Fanatio</option>
-                  <option value="Dilong">Dilong</option>
-                  <option value="Kisin">Kisin</option>
-                  <option value="Sathiel">Sathiel</option>
-                  <option value="Skaddi">Skaddi</option>
-                  <option value="Lacerannte">Lacerannte</option>
-                  <option value="Huumbug">Huumbug</option>
-                  <option value="Ocaoj">Ocaoj</option>
+                  <option value="Aviso">Aviso</option>
+                  <option value="Temp ban">Temp ban</option>
+                  <option value="Ban IP">Ban IP</option>
+                  <option value="Permanente">Permanente</option>
+                  <option value="Mute">Mute</option>
+                  <option value="Temp mute">Temp mute</option>
                 </select>
               </div>
-            </div>
-            <button className="new-submit-btn" onClick={handleSubmitChange}>Editar</button>
+              <div className="reason-container">
+                <label>Razón</label>
+                <textarea value={reason} onChange={(e) => { setReason(e.target.value) }}></textarea>
+              </div>
+              <div className="staff-container">
+                <label>Staff</label>
+                <div className="select-wrapper">
+                  <select
+                    value={staff}
+                    onChange={(e) => { setStaff(e.target.value) }}
+                  >
+                    <option value="Console">Console</option>
+                    <option value="Ryon">Ryon</option>
+                    <option value="Fanatio">Fanatio</option>
+                    <option value="Dilong">Dilong</option>
+                    <option value="Kisin">Kisin</option>
+                    <option value="Sathiel">Sathiel</option>
+                    <option value="Skaddi">Skaddi</option>
+                    <option value="Lacerannte">Lacerannte</option>
+                    <option value="Huumbug">Huumbug</option>
+                    <option value="Ocaoj">Ocaoj</option>
+                  </select>
+                </div>
+              </div>
+              {error ? (<p className="error-p">{error}</p>) : (<></>)}
+              <button className="new-submit-btn" onClick={handleSubmitChange}>Editar</button>
 
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-        </>
-      )}
+        ) : (
+          <>
+          </>
+        )
+      }
     </div >
   );
 }
