@@ -1,9 +1,23 @@
+import React from 'react'
+
 import "./App.css";
 import { db } from "./firebase";
 import { set, ref, onValue, remove, update } from "firebase/database";
 import { uid } from "uid";
 import { useState, useEffect } from "react";
 import "boxicons";
+import { BiSearch } from "react-icons/bi";
+
+
+
+// filters users 
+const getFilteredItems = (query, usersList) => {
+  if (!query) {
+    return usersList;
+  }
+  return usersList.filter((user) => user.nickname.toLowerCase().includes(query.toLowerCase()) || user.staff.toLowerCase().includes(query.toLowerCase()) || user.reason.toLowerCase().includes(query.toLowerCase()) || user.sanction.toLowerCase().includes(query.toLowerCase()));
+};
+
 
 function App() {
 
@@ -17,7 +31,7 @@ function App() {
   const [isHidden, setIsHidden] = useState(true);
   const [error, setError] = useState("");
   const [tempUuid, setTempUuid] = useState("");
-
+  const [searchInput, setSearchInput] = useState("");
 
   // read the database and set the "todo" objects in the "todos" Array
   useEffect(() => {
@@ -112,12 +126,17 @@ function App() {
     setStaff("Console");
   };
 
+  const filteredItems = getFilteredItems(searchInput, todos);
 
   return (
     <div className="App">
 
       <nav>
         <img src="/images/logoEgoodQ.png" alt="eventyr logo" className="eventyr-logo" />
+        <div className="search-bar">
+          <BiSearch className="icon" />
+          <input value={searchInput} onChange={(e) => { setSearchInput(e.target.value) }} type="text" />
+        </div>
         {/* Shows the inputs onClick. */}
         <button className="add-button" onClick={
           () => {
@@ -175,25 +194,16 @@ function App() {
             <div className="staff-container">
               <label>Staff</label>
               <div className="select-wrapper">
-                <select
+                <input
                   value={staff}
                   onChange={(e) => { setStaff(e.target.value) }}
-                >
-                  <option value="Console">Console</option>
-                  <option value="Ryon">Ryon</option>
-                  <option value="Fanatio">Fanatio</option>
-                  <option value="Dilong">Dilong</option>
-                  <option value="Kisin">Kisin</option>
-                  <option value="Sathiel">Sathiel</option>
-                  <option value="Skaddi">Skaddi</option>
-                  <option value="Lacerannte">Lacerannte</option>
-                  <option value="Huumbug">Huumbug</option>
-                  <option value="Ocaoj">Ocaoj</option>
-                </select>
+                />
               </div>
             </div>
+
             {error ? (<p className="error-p">{error}</p>) : (<></>)}
             <button className="new-submit-btn" onClick={() => { writeToDatabase(); }}>Añadir</button>
+
           </div>
         </div>
       )
@@ -203,9 +213,7 @@ function App() {
 
 
       <div id="cardsWrapper" className="cards-wrapper">
-        {todos.map((todo) => (
-
-
+        {filteredItems.map((todo) => (
 
           <div className="card" key={todo.uuid}>
             <div className="card-top-container">
@@ -277,23 +285,13 @@ function App() {
               <div className="staff-container">
                 <label>Staff</label>
                 <div className="select-wrapper">
-                  <select
+                  <input
                     value={staff}
                     onChange={(e) => { setStaff(e.target.value) }}
-                  >
-                    <option value="Console">Console</option>
-                    <option value="Ryon">Ryon</option>
-                    <option value="Fanatio">Fanatio</option>
-                    <option value="Dilong">Dilong</option>
-                    <option value="Kisin">Kisin</option>
-                    <option value="Sathiel">Sathiel</option>
-                    <option value="Skaddi">Skaddi</option>
-                    <option value="Lacerannte">Lacerannte</option>
-                    <option value="Huumbug">Huumbug</option>
-                    <option value="Ocaoj">Ocaoj</option>
-                  </select>
+                  />
                 </div>
               </div>
+
               {error ? (<p className="error-p">{error}</p>) : (<></>)}
               <button className="new-submit-btn" onClick={handleSubmitChange}>Editar</button>
 

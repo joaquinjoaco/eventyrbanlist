@@ -45,14 +45,41 @@ nav {
   padding-inline-end: 2rem;
 }
 
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--border);
+  border-radius: 5px;
+  margin-right: auto;
+}
+.search-bar .icon {
+  font-size: 1.8rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  color: var(--textcolor);
+}
+
+nav input {
+  display: block;
+  background-color: transparent;
+  color: var(--textcolor);
+  outline: none;
+  border: none;
+  margin: 0 auto;
+  width: 30vw;
+  font-size: 18px;
+  transition: all 0.2s;
+  padding: 10px;
+}
+
 .eventyr-logo {
   display: inline;
+  margin-right: auto;
   width: 50px;
 }
 
 .add-button {
-  position: absolute;
-  right: 10%;
+  display: inline;
   width: 60px;
   height: 25px;
   border: none;
@@ -91,11 +118,20 @@ nav {
   .new-write-popup {
     width: 65%;
   }
+
+  nav {
+    padding-inline-start: 6rem;
+    padding-inline-end: 6rem;
+  }
 }
 
 @media screen and (min-width: 1200px) {
   .new-write-popup {
     width: 30%;
+  }
+  nav {
+    padding-inline-start: 12rem;
+    padding-inline-end: 12rem;
   }
 }
 
@@ -186,7 +222,8 @@ nav {
   margin-bottom: 5px;
 }
 
-.nickname-container input {
+.nickname-container input,
+.staff-container input {
   display: block;
   background-color: var(--border);
   color: var(--textcolor);
@@ -205,8 +242,7 @@ nav {
   margin-top: 1.3rem;
 }
 
-.sanction-container select,
-.staff-container select {
+.sanction-container select {
   display: block;
 
   background-color: var(--border);
