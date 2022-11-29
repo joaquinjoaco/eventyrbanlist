@@ -89,6 +89,7 @@ function App() {
     setNickname(todo.nickname);
     setSanction(todo.sanction);
     setReason(todo.reason);
+    setStaff(todo.staff);
 
   }
 
