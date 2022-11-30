@@ -136,7 +136,10 @@ function App() {
         <img src="/images/logoEgoodQ.png" alt="eventyr logo" className="eventyr-logo" />
         <div className="search-bar">
           <BiSearch className="icon" />
-          <input value={searchInput} onChange={(e) => { setSearchInput(e.target.value) }} type="text" />
+          <input value={searchInput} onChange={(e) => { setSearchInput(e.target.value) }}
+            type="text"
+            placeholder="Nick, Sanción, Razón, Fecha, Staff..."
+          />
         </div>
         {/* Shows the inputs onClick. */}
         <button className="add-button" onClick={
@@ -163,7 +166,6 @@ function App() {
               setReason("");
               setStaff("Console");
               setError("")
-
             }}
             >
               <box-icon className="pelao" size="md" name="x" color="white"></box-icon>
